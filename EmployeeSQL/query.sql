@@ -50,3 +50,49 @@ AND last_name LIKE 'B%';
 
 
 -- #6
+WITH sales AS (
+	SELECT *
+	FROM departments
+	WHERE dept_no = 'd007'
+)
+, num AS (
+	SELECT sales.dept_name, de.emp_no
+	FROM dept_emp de
+		JOIN sales ON de.dept_no = sales.dept_no
+)
+, emp AS (
+	SELECT num.*, e.first_name, e.last_name
+	FROM employees e
+		JOIN num ON e.emp_no = num.emp_no
+)
+SELECT emp_no, first_name, last_name, dept_name
+FROM emp;
+
+
+-- #7
+WITH sales AS (
+	SELECT *
+	FROM departments
+	WHERE dept_no = 'd007'
+	OR dept_no = 'd005'
+)
+, num AS (
+	SELECT sales.dept_name, de.emp_no
+	FROM dept_emp de
+		JOIN sales ON de.dept_no = sales.dept_no
+)
+, emp AS (
+	SELECT num.*, e.first_name, e.last_name
+	FROM employees e
+		JOIN num ON e.emp_no = num.emp_no
+)
+SELECT emp_no, first_name, last_name, dept_name
+FROM emp
+ORDER BY dept_name;
+
+
+-- #8
+SELECT last_name, COUNT(last_name) AS count
+FROM employees
+GROUP BY last_name
+ORDER BY count DESC;
